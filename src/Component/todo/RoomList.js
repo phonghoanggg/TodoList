@@ -116,6 +116,7 @@ function RoomList(props) {
     props.setIdRoom(auth.currentUser.uid);
     props.setIdRoom("ME");
   };
+  console.log(listRoom);
   return (
     <div className="group">
       <div>

@@ -106,10 +106,10 @@
   position: absolute;
   height: 64px;
   width: 80px;
+  top: -53px;
+  right: -54px;
   background-color: #eee;
   text-align: center;
-  top: 0;
-  transform: translate(125%, -81%);
   border-radius: 10px;
   cursor: pointer;
   box-shadow: 1px 1px #ccc;

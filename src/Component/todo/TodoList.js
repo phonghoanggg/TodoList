@@ -15,6 +15,8 @@ import auth, { db } from "../../firebase";
 import Control from "../footer/Control";
 import RoomList from "./RoomList";
 import { CloseCircleOutlined, SmileOutlined } from "@ant-design/icons";
+import { Popconfirm } from "antd";
+import { async } from "@firebase/util";
 const PerContext = React.createContext();
 
 function TodoList(props) {
@@ -91,10 +93,21 @@ function TodoList(props) {
       { merge: true }
     );
   };
-  console.log(idRoom.owner);
-  console.log(props.id);
-  console.log(listMember);
+  const handleDeleteMem = async (idMem) => {
+    const newMem = idRoom.member.filter((mem) => mem !== idMem);
 
+    const docRef = doc(db, "user_room", idMem);
+    await setDoc(
+      docRef,
+      {
+        member: [newMem],
+      },
+      {
+        merge: true,
+      }
+    );
+  };
+  console.log(listMember);
   return (
     <PerContext.Provider value={todo}>
       <div className="content">
@@ -105,42 +118,36 @@ function TodoList(props) {
             {idRoom !== "ME" ? (
               <ul>
                 <span style={{ fontSize: 16 }}>Members of the group: </span>
-                {idRoom.member && props.user ? (
-                  listMember.map((mem, index) => {
-                    return mem.uid !== idRoom.owner ? (
-                      <>
-                        <li
-                          className="group_member-item"
-                          style={{ textAlign: "center", marginTop: 10 }}
-                          key={index}
-                        >
-                          <CloseCircleOutlined />
-                          <span> {mem.displayname}</span>
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li
-                          className="group_member-item"
-                          style={{ textAlign: "center", marginTop: 10 }}
-                          key={index}
-                        >
-                          <span> {mem.displayname}</span>
-                        </li>
-                      </>
-                    );
-                  })
-                ) : (
-                  // <li
-                  //   className="group_member-item"
-                  //   style={{ textAlign: "center", marginTop: 10 }}
-                  //   key={index}
-                  // >
-                  //   <span> {mem.displayname}</span>
-                  // </li>
-
-                  <></>
-                )}
+                {listMember.map((user, index) => {
+                  return auth.currentUser.uid === idRoom.owner ||
+                    user.uid === auth.currentUser.uid ? (
+                    <li
+                      className="group_member-item"
+                      style={{ textAlign: "center", marginTop: 10 }}
+                      key={index}
+                    >
+                      <span>{user.displayname}</span>
+                      <Popconfirm
+                        title="Get out of the group？"
+                        okText="Yes"
+                        cancelText="No"
+                        onConfirm={() => handleDeleteMem(user.uid)}
+                      >
+                        <CloseCircleOutlined style={{ marginLeft: 5 }} />
+                      </Popconfirm>
+                    </li>
+                  ) : (
+                    <>
+                      <li
+                        className="group_member-item"
+                        style={{ textAlign: "center", marginTop: 10 }}
+                        key={index}
+                      >
+                        <span> {user.displayname}</span>
+                      </li>
+                    </>
+                  );
+                })}
               </ul>
             ) : (
               <span className="page_hello">
