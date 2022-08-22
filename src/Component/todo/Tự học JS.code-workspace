@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "Tự học JS",
+      "path": "..\\..\\..\\..\\Tự học JS"
+    },
+    {
+      "name": "Tự học ReactJS",
+      "path": "..\\..\\.."
+    },
+    {
+      "name": "Tự học HTML",
+      "path": "..\\..\\..\\..\\Tự học HTML"
+    }
+  ],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "Tự học JS"
+  }
+}
